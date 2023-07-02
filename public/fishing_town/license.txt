@@ -1,0 +1,11 @@
+Model Information:
+* title:	Fishing Town
+* source:	https://sketchfab.com/3d-models/fishing-town-907592e0212c41e9b23cf792dd962d88
+* author:	LowPolyBoy (https://sketchfab.com/lowPolyBoy)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Fishing Town" (https://sketchfab.com/3d-models/fishing-town-907592e0212c41e9b23cf792dd962d88) by LowPolyBoy (https://sketchfab.com/lowPolyBoy) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

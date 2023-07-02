@@ -1,0 +1,11 @@
+Model Information:
+* title:	Cute handpainted wolf
+* source:	https://sketchfab.com/3d-models/cute-handpainted-wolf-5f8ed6e59251438d9b5c3ac5bbc93c2d
+* author:	Anna Espenstein (https://sketchfab.com/Anna.Espenstein)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Cute handpainted wolf" (https://sketchfab.com/3d-models/cute-handpainted-wolf-5f8ed6e59251438d9b5c3ac5bbc93c2d) by Anna Espenstein (https://sketchfab.com/Anna.Espenstein) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
