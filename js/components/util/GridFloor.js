@@ -31,9 +31,6 @@ function highlightMesh(width = 1, height = 1) {
 
 }
 
-function mousePos() {
-
-}
 
 function makeGridFloorHelper(scene, camera, floorW = 20, FloorH = 20, highlightW = 1, highlightH = 1) {
 

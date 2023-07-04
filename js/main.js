@@ -2,20 +2,41 @@ import * as THREE from 'three';
 import WebGl from 'three/examples/jsm/capabilities/WebGL.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { load3dModel } from './components/loader/LoadModel';
+import { load3dModel } from './components/LoadModel';
 import { makeGridFloorHelper } from './components/util/GridFloor';
 import { makeDungeonFloor } from './components/map/floor';
+import { World } from './World';
 
 
 
 async function main() {
 
 
-    const scene = new THREE.Scene();
+    // new code
+    
+    const container = document.querySelector('#scene-container');
+
+    const world = new World(container);
+    
+    //verifica a compatibilidade do navegador
+    if (WebGl.isWebGL2Available()) {
+
+        world.animate();
+
+    } else {
+        const warning = WebGl.getErrorMessage();
+        document.getElementById('container').appendChild(warning);
+
+    }
+    
+
+    //
+    /*const scene = new THREE.Scene();
 
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(10, 15, -22);
-    //camera.lookAt( 0, 0, 0 );
+    
+    
 
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -35,9 +56,9 @@ async function main() {
     console.log(dungeon3DModelPack);
     makeGridFloorHelper(scene, camera, 120, 120);
 
-    makeDungeonFloor(scene, dungeon3DModelPack, 120);
+    //makeDungeonFloor(scene, dungeon3DModelPack, 120);
 
-
+    
 
 
 
@@ -58,7 +79,7 @@ async function main() {
         const warning = WebGl.getErrorMessage();
         document.getElementById('container').appendChild(warning);
 
-    }
+    }*/
 
 }
 
