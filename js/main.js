@@ -13,22 +13,29 @@ async function main() {
 
 
     // new code
-    
-    const container = document.querySelector('#scene-container');
 
-    const world = new World(container);
-    
+    const container = document.querySelector('#scene-container');
+    const allowVR = false;
+
+    const world = new World({ canvas: container, allowVR: allowVR });
+
+    await world.initAsync();
+
+    world.plotObj();
+
     //verifica a compatibilidade do navegador
     if (WebGl.isWebGL2Available()) {
 
-        world.animate();
+        if (!allowVR) {
+            world.animate();
+        }
 
     } else {
         const warning = WebGl.getErrorMessage();
         document.getElementById('container').appendChild(warning);
 
     }
-    
+
 
     //
     /*const scene = new THREE.Scene();

@@ -11,7 +11,6 @@ const setSize = (container, camera, renderer) => {
 class Resizer {
 
     constructor(container, camera, renderer) {
-        console.log('chegou')
         setSize(container, camera, renderer);
 
         window.addEventListener('resize', () => {

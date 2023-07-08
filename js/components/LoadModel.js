@@ -13,11 +13,11 @@ async function load3dModel(url) {
 
     })
 
-    const model = gltfData.scene.getObjectByName('door001');
-    model.position.set(0, 0, 0);
-    model.scale.set(1, 1, 1);
+    //const model = gltfData.scene.getObjectByName('door001');
+    //model.position.set(0, 0, 0);
+    //model.scale.set(1, 1, 1);
 
-    return model;
+    return gltfData;
 
     /*loader.load(url, function (gltf) {
 
