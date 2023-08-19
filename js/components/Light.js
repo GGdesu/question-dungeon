@@ -3,7 +3,7 @@ import { HemisphereLight } from "three";
 
 function createLight() {
 
-    const ambientLight = new HemisphereLight('white',
+    const ambientLight = new HemisphereLight('grey',
         'darkslategrey',
         5);
 

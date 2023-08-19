@@ -1,3 +1,4 @@
+import * as CANNON from 'cannon-es';
 import * as THREE from 'three';
 
 function gridFloor(width = 20, height = 20) {
@@ -32,7 +33,7 @@ function highlightMesh(width = 1, height = 1) {
 }
 
 
-function makeGridFloorHelper(scene, camera, floorW = 20, FloorH = 20, highlightW = 1, highlightH = 1) {
+function makeGridFloorHelper(physic,scene, camera, floorW = 20, FloorH = 20, highlightW = 1, highlightH = 1) {
 
     const floor = gridFloor(floorW, FloorH);
     scene.add(floor);
@@ -42,6 +43,19 @@ function makeGridFloorHelper(scene, camera, floorW = 20, FloorH = 20, highlightW
 
     const hlFloor = highlightMesh(highlightW, highlightH)
     scene.add(hlFloor);
+
+    //physic body
+    const groundBody = new CANNON.Body({
+        shape: new CANNON.Plane(),
+        type: CANNON.Body.STATIC,
+
+    });
+
+    groundBody.position.copy(floor.position);
+    groundBody.quaternion.copy(floor.quaternion);
+
+    physic.addBody(groundBody);
+    //
 
     const mousePosition = new THREE.Vector2();
     const raycaster = new THREE.Raycaster();
