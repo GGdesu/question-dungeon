@@ -24,6 +24,9 @@ import { makeDungeon } from "./components/map/Dungeon";
 import { Quaternion } from "three";
 import { Vector3 } from "three";
 import { getObjSize } from "./components/util/Utils";
+import { DirectionalLight } from "three";
+import { PointLightHelper } from "three";
+
 
 
 
@@ -52,17 +55,18 @@ class World {
         controls = createOrbitControls(camera, renderer.domElement);
 
         //physic setup
-        physicWorld = new CANNON.World({
-            gravity: new CANNON.Vec3(0, -9.82, 0)
-        });
+        //physicWorld = new CANNON.World({
+        //    gravity: new CANNON.Vec3(0, -9.82, 0)
+        //});
 
         //cannon debugger
-        this.cannonDebug = new CannonDebugger(scene, physicWorld, {
-            color: 0x0000ff
-        });
+        // this.cannonDebug = new CannonDebugger(scene, physicWorld, {
+        //     color: 0x0000ff
+        // });
 
 
         container.append(renderer.domElement);
+
 
 
 
@@ -80,9 +84,9 @@ class World {
         } else {
             //this.createDolly();
             const rig = new THREE.Object3D();
-            this.fpVrControl = new FirstPersonVRControls(camera, scene);
+            this.fpVrControl = new FirstPersonVRControls(camera, scene );
 
-            this.fpVrControl.verticalMovement = false;
+            //this.fpVrControl.verticalMovement = false;
             // You can also enable strafing, set movementSpeed, snapAngle and boostFactor.
             this.fpVrControl.strafing = true;
             this.fpVrControl.movementSpeed = 10;
@@ -92,6 +96,10 @@ class World {
 
             renderer.setAnimationLoop(this.animate.bind(this));
         }
+
+        //audio
+       
+        //
 
         scene.add(light);
 
@@ -173,18 +181,18 @@ class World {
             requestAnimationFrame(this.animate.bind(this));
         }
 
-        //this.fpVrControl.update(this.clock.getDelta());
+
         if (renderer.xr.isPresenting) {
             //this.handleMovement();
-
+            this.fpVrControl.update(this.clock.getDelta());
             //camera.position.copy(this.dolly.position);
             //camera.translateZ(0.025);
             //this.dolly.position.copy(camera.position);
             //this.dolly.position.y = 0;
         }
         ThreeMeshUi.update();
-        physicWorld.fixedStep();
-        this.cannonDebug.update();
+        //physicWorld.fixedStep();
+        // this.cannonDebug.update();
         this.render();
     }
 }

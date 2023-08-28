@@ -47,11 +47,11 @@ function getRandomIndex(list, customLength = 0) {
 function createQuestionUi(question, answer) {
 
     const group = new Group();
-    group.name = "question_group"
+    group.name = "question_group";
 
-    answer = shuffleArray(answer);
+    answer = answer;
 
-    const answerColor = shuffleArray(COLORS);
+    const answerColor = COLORS;
 
     //question panel
     const questionBlock = new ThreeMeshUi.Block({

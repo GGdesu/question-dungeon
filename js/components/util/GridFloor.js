@@ -45,16 +45,16 @@ function makeGridFloorHelper(physic,scene, camera, floorW = 20, FloorH = 20, hig
     scene.add(hlFloor);
 
     //physic body
-    const groundBody = new CANNON.Body({
-        shape: new CANNON.Plane(),
-        type: CANNON.Body.STATIC,
+    // const groundBody = new CANNON.Body({
+    //     shape: new CANNON.Plane(),
+    //     type: CANNON.Body.STATIC,
 
-    });
+    // });
 
-    groundBody.position.copy(floor.position);
-    groundBody.quaternion.copy(floor.quaternion);
+    // groundBody.position.copy(floor.position);
+    // groundBody.quaternion.copy(floor.quaternion);
 
-    physic.addBody(groundBody);
+    // physic.addBody(groundBody);
     //
 
     const mousePosition = new THREE.Vector2();

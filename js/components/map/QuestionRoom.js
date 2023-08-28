@@ -1,74 +1,24 @@
-import { Color, Group, BoxHelper } from "three";
+import { Color, Group, BoxHelper, Box3 } from "three";
 ///import * as THREE from "three";
-import { degToRad, radToDeg } from "three/src/math/MathUtils";
+import { degToRad } from "three/src/math/MathUtils";
 import { getObjSize, getRandomIndex, shuffleArray, visualizeBox } from "../util/Utils";
 import { COLORS } from "../util/Constants";
-import * as CANNON from "cannon-es";
 import { Vector3 } from "three";
 
 
 
-function frontRoom({ model: model, qRoom: qRoom, doorColor: dColor, walls: walls, physWorld: physicWorld }) {
+function frontRoom({ model: model, qRoom: qRoom, doorColor: dColor, walls: walls }) {
 
     // fazer com que possa fazer front walls para question room e room normal
     // e para isso criar uma função com o nome front wall
     const frontRoom = new Group();
     frontRoom.name = 'frontRoom';
 
-
-
-
     if (qRoom) {
-
-        const brickWall = model.scene.getObjectByName('brick_wall_with_door').clone();;
-        brickWall.scale.set(1, 1, 1);
-        brickWall.position.set(0.5, 0, 0.5);
-
-        //console.log(brickWall);
-        //brickWall.computeBoundingBox();
-        //const test = getObjSize(brickWall);
-        //console.log(test)
-
-        const door = model.scene.getObjectByName('door001').clone();
-
-        //clonar o material pra não ficar referenciando o mesmo material original para todos
-        const clonedMaterial1 = door.children[0].material.clone();
-        const color1 = new Color(dColor.cor1);
-        clonedMaterial1.color = color1;
-        door.children[0].material = clonedMaterial1;
-
-        const clonedMaterial2 = door.children[2].material.clone();
-        const color2 = new Color(dColor.cor2);
-        clonedMaterial2.color = color2;
-        door.children[2].material = clonedMaterial2;
-
-        //adicionar a porta como filha da parede com arco
-        brickWall.add(door);
-        door.scale.set(1, 1, 1);
-        door.position.set(2.2, 0, 1.2);
-        door.rotateX(degToRad(90));
-
-
-        frontRoom.add(brickWall);
-
-
-        //adicionar uma parede extra em cada lado da parede com arco
-        const leftWall = model.scene.getObjectByName('brick_wall001').clone();
-
-        brickWall.add(leftWall);
-        leftWall.position.set(0, 0, 0);
-        leftWall.scale.set(1, 1, 1);
-        leftWall.rotateX(degToRad(90));
-        leftWall.rotateZ(degToRad(180));
-
-        const rightWall = leftWall.clone();
-        brickWall.add(rightWall);
-        rightWall.position.set(8.4, 0, 0);
-        rightWall.scale.set(1, 1, 1);
-        brickWall.translateX(0.3);
+        frontRoom.add(getFrontWall(model, walls, dColor, qRoom));
 
     } else {
-        frontRoom.add(getFrontWall(model, walls));
+        frontRoom.add(getFrontWall(model, walls, dColor, qRoom));
     }
 
 
@@ -76,12 +26,12 @@ function frontRoom({ model: model, qRoom: qRoom, doorColor: dColor, walls: walls
 
 }
 
-function createRoom({ model: model, name: name = '', qRoom: qRoom = false, sideWallNumber: sWallNumber, backWallNumber: bWallNumber, doorColor: dColor, physWorld: physicWorld }) {
+function createRoom({ model: model, name: name = '', qRoom: qRoom = false, sideWallNumber: sWallNumber, backWallNumber: bWallNumber, doorColor: dColor }) {
 
-    const walls = getWall(model, qRoom, physicWorld);
+    const walls = getWall(model, qRoom);
 
     const room = new Group();
-    room.add(frontRoom({ model: model, qRoom: qRoom, doorColor: dColor, walls: walls, physWorld: physicWorld }));
+    room.add(frontRoom({ model: model, qRoom: qRoom, doorColor: dColor, walls: walls }));
     room.name = name;
     //const wall = model.scene.getObjectByName('brick_wall002').clone();
 
@@ -163,25 +113,63 @@ function createRoom({ model: model, name: name = '', qRoom: qRoom = false, sideW
 
     }
 
+    //add AABB for collison
+    // const rightBoxHelper = new BoxHelper(rightWallGroup, 0xff0000);
+    // rightBoxHelper.name = "rightBoxHelper"
+    // const rightBBox = new Box3();
+    // rightBBox.setFromObject(rightBoxHelper);
+    // rightBBox.name = "rightBBox";
+    // rightWallGroup.add(rightBoxHelper);
+    //rightWallGroup.add(rightBBox);
+
+
+    // const leftBoxHelper = new BoxHelper(leftWallGroup, 0x00ff00);
+    // leftBoxHelper.name = "leftBoxHelper"
+    // const leftBBox = new Box3();
+    // leftBBox.setFromObject(leftBoxHelper);
+    // leftBBox.name = "leftBBox";
+    // leftWallGroup.add(leftBoxHelper);
+    // //leftWallGroup.add(leftBBox);
+
+    // const backBoxHelper = new BoxHelper(backWallGroup, 0x0000ff);
+    // backBoxHelper.name = "backBoxHelper";
+    // const backBBox = new Box3();
+    // backBBox.name = "backBBox";
+    // backBBox.setFromObject(backBoxHelper);
+    // backWallGroup.add(backBoxHelper);
+
     roomWalls.add(backWallGroup, rightWallGroup, leftWallGroup)
     room.add(roomWalls);
     //room.rotateY(degToRad(90));
+    if(!qRoom){
+        console.log(room);
+        room.getObjectByName("door_arc").position.x = 4;
+        room.getObjectByName("door001") === undefined ? "n é obj":  room.getObjectByName("door001").position.x = 3;
+        //room.add(getBBoxHelper(room));
+        
+    }
     return room;
 
 
 }
 
 //criar a função aqui pra depois colocar em question dungeon
-function getFrontWall(model, walls, physicWorld = null) {
+function getFrontWall(model, walls, dColor, qRoom = false) {
 
+    const frontGroup = new Group();
+    frontGroup.name = "front_wall_group"
+    //frontGroup.position.x = -14;
     //get door arc
     const doorArc = model.scene.getObjectByName('door_arc').clone();
     doorArc.scale.set(1, 1, 1);
-    doorArc.position.set(0, 1, 0);
+    doorArc.position.set(0, 1, 0.2);
+    frontGroup.add(doorArc)
 
     //rand number 0 to 2
-    const nRandom = Math.floor(Math.random() * 3);
-
+    let nRandom = Math.floor(Math.random() * 3);
+    if (qRoom) {
+        nRandom = 1;
+    }
 
     switch (nRandom) {
         case 0:
@@ -196,10 +184,21 @@ function getFrontWall(model, walls, physicWorld = null) {
 
         case 1:
             const door = model.scene.getObjectByName('door001').clone();
-            doorArc.add(door);
+            //doorArc.add(door);
+            frontGroup.add(door);
             door.scale.set(1, 1, 1);
-            door.position.set(-1, 0, 0.2);
-            door.rotateX(degToRad(90));
+            door.position.set(-1, 1.2, 0.4);
+            //door.rotateX(degToRad(90));
+
+            const clonedMaterial1 = door.children[0].material.clone();
+            const color1 = new Color(dColor.cor1);
+            clonedMaterial1.color = color1;
+            door.children[0].material = clonedMaterial1;
+
+            const clonedMaterial2 = door.children[2].material.clone();
+            const color2 = new Color(dColor.cor2);
+            clonedMaterial2.color = color2;
+            door.children[2].material = clonedMaterial2;
             break;
 
         case 2:
@@ -209,41 +208,59 @@ function getFrontWall(model, walls, physicWorld = null) {
 
 
 
+
+    const leftFrontWall = new Group();
+    leftFrontWall.name = "left_front_wall_group";
+    leftFrontWall.position.z = 1.2;
+    leftFrontWall.position.x = 4
+    const rightFrontWall = new Group();
+    rightFrontWall.name = "right_front_wall_group";
+    rightFrontWall.position.z = 1.2;
+    rightFrontWall.position.x = 4;
+
     //random wall 0
+    //doorArc.add(leftFrontWall); // add left front wall group to door arc
+    //doorArc.add(rightFrontWall);// add right front wall group to door arc
+    frontGroup.add(leftFrontWall, rightFrontWall);
     const wall = walls[getRandomIndex(walls)].clone();
-    doorArc.add(wall);
+    leftFrontWall.add(wall);
+    //doorArc.add(wall);
     wall.scale.set(1, 1, 1);
     wall.position.set(1.05, 0, -1);
-    wall.rotateX(degToRad(90));
+    //wall.rotateX(degToRad(90));
 
     //random wall 1
     const wall2 = walls[getRandomIndex(walls)].clone();
-    doorArc.add(wall2);
+    leftFrontWall.add(wall2);
+    //doorArc.add(wall2);
     wall2.scale.set(1, 1, 1);
     wall2.position.set(3.1, 0, -1);
-    wall2.rotateX(degToRad(90));
+    //wall2.rotateX(degToRad(90));
+
 
     //random wall 2
     const wall3 = walls[getRandomIndex(walls)].clone();
-    doorArc.add(wall3);
+    rightFrontWall.add(wall3);
+    //doorArc.add(wall3);
     wall3.scale.set(-1, 1, 1);
     wall3.position.set(-1.1, 0, -1);
-    wall3.rotateX(degToRad(90));
+    //wall3.rotateX(degToRad(90));
 
     //ranndom wall 3
     const wall4 = walls[getRandomIndex(walls)].clone();
-    doorArc.add(wall4);
+    rightFrontWall.add(wall4);
+    //doorArc.add(wall4);
     wall4.scale.set(-1, 1, 1);
     wall4.position.set(-3.2, 0, -1);
-    wall4.rotateX(degToRad(90));
+    //wall4.rotateX(degToRad(90));
 
-    doorArc.translateX(4);
-    doorArc.translateY(-0.5);
+    //frontGroup.translateX(4);
+    //frontGroup.translateY(-0.5);
 
-    return doorArc;
+    return frontGroup;
 }
 
-function getWall(model, qRoom = false, physicWorld = null) {
+function getWall(model, qRoom = false) {
 
     const bWalls = [];
     const sWalls = [];
@@ -284,27 +301,38 @@ function getWall(model, qRoom = false, physicWorld = null) {
 
 }
 
-function questionRoom(model, physicWorld) {
+function questionRoom(model, backWallArray) {
 
     //[eggplant & dark purple], [field drab], [blood red & black bean]
-    const doorColors = shuffleArray(COLORS);
+    const doorColors = COLORS;
 
-    const backWallNumber = shuffleArray([3, 5, 5]);
-
-    const room = createRoom({ model: model, name: 'room01', qRoom: true, sideWallNumber: 5, backWallNumber: backWallNumber[0], doorColor: doorColors[0], physWorld: physicWorld });
-
-
-    const room2 = createRoom({ model: model, name: 'room02', qRoom: true, sideWallNumber: 5, backWallNumber: backWallNumber[1], doorColor: doorColors[1], physWorld: physicWorld });
-    room2.position.set(11, 0, 0);
-
-    const room3 = createRoom({ model: model, name: 'room03', qRoom: true, sideWallNumber: 5, backWallNumber: backWallNumber[2], doorColor: doorColors[2], physWorld: physicWorld });
-    room3.position.set(-11, 0, 0);
-
+    const backWallNumber = backWallArray;
+    //const backWallNumber = shuffleArray([3, 5, 5]);
     const roomGroup = new Group();
-    roomGroup.add(room);
-    roomGroup.add(room2);
-    roomGroup.add(room3);
 
+    for (let i = 0; i < 3; i++) {
+        const room = createRoom({
+            model: model,
+            name: `room0${i + 1}`,
+            qRoom: true,
+            sideWallNumber: 5,
+            backWallNumber: backWallNumber[i],
+            doorColor: doorColors[i]
+        });
+        //room.getObjectByName("front_wall_group").position.x = 4;
+        room.getObjectByName("door_arc").position.x = 4;
+        room.getObjectByName("door001").position.x = 3;
+        room.position.set(i * 11 - 11, 0, 0);
+        roomGroup.add(room);
+
+        // const boxHelperGroup = new Group();
+        // boxHelperGroup.name = "box_helper_group";
+        // boxHelperGroup.add(getBBoxHelper(room));
+        // room.add(getBBoxHelper(room));
+    }
+
+    //roomGroup.getObjectByName("box_helper_group").children[0].children[0].position.x = -12;
+    //console.log( roomGroup.getObjectByName("box_helper_group").children[0].children[0])
     //add extra wall in the end
     const extraWallRight = model.scene.getObjectByName("brick_wall").clone();
     extraWallRight.rotateZ(degToRad(90));
@@ -319,6 +347,37 @@ function questionRoom(model, physicWorld) {
     //
     return roomGroup;
 
+}
+
+function getBBoxHelper(room) {
+
+    //room walls
+    const rightBoxHelper = new BoxHelper(room.getObjectByName("right_wall_group"), 0xff0000);
+    rightBoxHelper.name = "rightBoxHelper";
+
+    const leftBoxHelper = new BoxHelper(room.getObjectByName("left_wall_group"), 0x00ff00);
+    leftBoxHelper.name = "leftBoxHelper";
+
+    const backBoxHelper = new BoxHelper(room.getObjectByName("back_wall_group"), 0x0000ff);
+    backBoxHelper.name = "backBoxHelper";
+
+    //front room
+    const leftFrontWallBoxHelper = new BoxHelper(room.getObjectByName("left_front_wall_group"), 0xff0000);
+    leftFrontWallBoxHelper.name = "leftFrontWallBoxHelper";
+    leftFrontWallBoxHelper.position.copy(room.getObjectByName("left_front_wall_group").position);
+    //leftFrontWallBoxHelper.position.x = 4;
+    //leftFrontWallBoxHelper.update();
+
+    const rightFrontWallBoxHelper = new BoxHelper(room.getObjectByName("right_front_wall_group"), 0x00ff00);
+    rightFrontWallBoxHelper.name = "rightFrontWallBoxHelper";
+    console.log(leftFrontWallBoxHelper.position)
+    //rightFrontWallBoxHelper.position.copy(room.getObjectByName("right_front_wall_group").position);
+    //rightFrontWallBoxHelper.updateMatrixWorld();
+
+    const roomBoxGroup = new Group();
+    roomBoxGroup.add(rightBoxHelper, leftBoxHelper, backBoxHelper, leftFrontWallBoxHelper, rightFrontWallBoxHelper);
+
+    return roomBoxGroup;
 }
 
 

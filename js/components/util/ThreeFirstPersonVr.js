@@ -34,6 +34,7 @@ export default class FirstPersonVRControls {
     this._camera = camera;
     if (!rig) {
       this.rig = new THREE.Object3D();
+      this.rig.position.set(-37, 0.5, 144);
       this.rig.add(camera);
       scene.add(this.rig);
     } else {
@@ -135,7 +136,7 @@ export default class FirstPersonVRControls {
     if (this.boost && this._boosting) actualMoveSpeed = actualMoveSpeed * this.boostFactor;
     
     if (this._moveForward) this._tempObject.translateZ( actualMoveSpeed);
-    if (this._moveBackward) this._tempObject.translateZ(- actualMoveSpeed);
+    if (this._moveBackward) this._tempObject.translateZ( -actualMoveSpeed);
 
     if (this.strafing && this._moveLeft) this._tempObject.translateX(- actualMoveSpeed);
     if (this.strafing && this._moveRight) this._tempObject.translateX(actualMoveSpeed);

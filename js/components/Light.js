@@ -1,13 +1,28 @@
-import { HemisphereLight } from "three";
+import { AmbientLight } from "three";
+import { DirectionalLight } from "three";
+import { HemisphereLight, PointLight } from "three";
 
 
 function createLight() {
 
+    // const lightArray = []
+
+    // for(let i = 0; i < 4; i++){
+    //     const light = new PointLight(0x757575, 1, 0);
+    //     lightArray.push(light);
+    // }
+
+    //const light = new PointLight(0x757575, 2, 0);
     const ambientLight = new HemisphereLight('grey',
         'darkslategrey',
-        5);
+        10);
 
-    return ambientLight ;
+
+    //const direcLight = new DirectionalLight( 0xffffff, 0.5 );
+
+    // lightArray.push(ambientLight);
+    //const light = new AmbientLight( 0x404040 );
+    return ambientLight;
 }
 
 export {
