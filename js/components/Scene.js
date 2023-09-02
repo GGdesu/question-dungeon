@@ -15,7 +15,7 @@ function createScene() {
         wallTexture
     ]);
 
-    //scene.fog = new Fog(0x2D2D2D, 10, 75);
+    scene.fog = new Fog(0x2D2D2D, 10, 75);
     //color space cadet
     //scene.background = new Color(0x242D53);
 

@@ -26,6 +26,7 @@ import { Vector3 } from "three";
 import { getObjSize } from "./components/util/Utils";
 import { DirectionalLight } from "three";
 import { PointLightHelper } from "three";
+import { PickHelper } from "./components/util/PickHelper";
 
 
 
@@ -38,6 +39,8 @@ let renderer;
 let controls;
 let physicWorld;
 let allowVR = false;
+
+let listener, audioLoader, backgroundSound;
 
 let models;
 
@@ -54,18 +57,25 @@ class World {
         renderer = createRenderer();
         controls = createOrbitControls(camera, renderer.domElement);
 
-        //physic setup
-        //physicWorld = new CANNON.World({
-        //    gravity: new CANNON.Vec3(0, -9.82, 0)
-        //});
-
-        //cannon debugger
-        // this.cannonDebug = new CannonDebugger(scene, physicWorld, {
-        //     color: 0x0000ff
-        // });
 
 
         container.append(renderer.domElement);
+
+        //audio
+        listener = new THREE.AudioListener();
+        camera.add(listener);
+
+        audioLoader = new THREE.AudioLoader();
+
+        backgroundSound = new THREE.Audio(listener);
+
+        audioLoader.load('/music/background_music.mp3', function (buffer) {
+            backgroundSound.setBuffer(buffer);
+            backgroundSound.setLoop(true);
+            backgroundSound.setVolume(0.05);
+            backgroundSound.play();
+        });
+        //
 
 
 
@@ -82,14 +92,17 @@ class World {
 
 
         } else {
-            //this.createDolly();
-            const rig = new THREE.Object3D();
-            this.fpVrControl = new FirstPersonVRControls(camera, scene );
+            //const rig = new THREE.Object3D();
+            this.fpVrControl = new FirstPersonVRControls(camera, scene);
+
 
             //this.fpVrControl.verticalMovement = false;
             // You can also enable strafing, set movementSpeed, snapAngle and boostFactor.
             this.fpVrControl.strafing = true;
             this.fpVrControl.movementSpeed = 10;
+
+
+
 
             this.setupXR(container);
 
@@ -97,15 +110,21 @@ class World {
             renderer.setAnimationLoop(this.animate.bind(this));
         }
 
-        //audio
-       
-        //
+        //this.pickHelper = new PickHelper(camera);
 
-        scene.add(light);
+        //scene.add(camera);
+
+        
+        light[0].position.set(-83, 20, 105);
+        light[1].position.set(-92, 20, 90);
+        light[2].position.set(97, 20, -90);
+        light[3].position.set(96, 20, 94);
+
+        scene.add(light[0], light[1], light[2], light[3]);
 
         const resizer = new Resizer(container, camera, renderer);
 
-        makeGridFloorHelper(physicWorld, scene, camera, 300, 300);
+        //makeGridFloorHelper(physicWorld, scene, camera, 300, 300);
 
 
     }
@@ -176,23 +195,28 @@ class World {
 
 
 
-    animate() {
+    animate(time) {
+
+        time *= 0.001;
+
         if (!allowVR) {
             requestAnimationFrame(this.animate.bind(this));
         }
 
 
         if (renderer.xr.isPresenting) {
-            //this.handleMovement();
+
             this.fpVrControl.update(this.clock.getDelta());
-            //camera.position.copy(this.dolly.position);
-            //camera.translateZ(0.025);
-            //this.dolly.position.copy(camera.position);
-            //this.dolly.position.y = 0;
+
         }
         ThreeMeshUi.update();
-        //physicWorld.fixedStep();
-        // this.cannonDebug.update();
+        // const selectedObj = this.pickHelper.pick({ x: 0, y: 0 }, scene, camera, time);
+        // if (selectedObj) {
+
+        //     selectedObj.visible = false;
+
+        // }
+       
         this.render();
     }
 }

@@ -29,6 +29,8 @@ function frontRoom({ model: model, qRoom: qRoom, doorColor: dColor, walls: walls
 function createRoom({ model: model, name: name = '', qRoom: qRoom = false, sideWallNumber: sWallNumber, backWallNumber: bWallNumber, doorColor: dColor }) {
 
     const walls = getWall(model, qRoom);
+    console.log(model.scene.getObjectByName("RootNode"));
+    //const wall = model.scene.getObjectByName("brick_wall001");
 
     const room = new Group();
     room.add(frontRoom({ model: model, qRoom: qRoom, doorColor: dColor, walls: walls }));
@@ -53,6 +55,7 @@ function createRoom({ model: model, name: name = '', qRoom: qRoom = false, sideW
         for (let j = 0; j < (i === 1 ? bWallNumber : sWallNumber); j++) {
 
             const wallClone = walls[getRandomIndex(walls)].clone();
+            //const wallClone = wall.clone();
             wallClone.scale.set(1, 1, 1);
             const sizeWall = getObjSize(wallClone);
             //wallClone.name = name + j;
@@ -67,6 +70,7 @@ function createRoom({ model: model, name: name = '', qRoom: qRoom = false, sideW
 
 
                 wallClone.rotateZ(degToRad(180));
+                backWallGroup.add(wallClone);
                 backWallGroup.add(wallClone);
 
             } else {
@@ -91,6 +95,7 @@ function createRoom({ model: model, name: name = '', qRoom: qRoom = false, sideW
 
                     wallClone.rotateZ(degToRad(90));
                     rightWallGroup.add(wallClone);
+                    rightWallGroup.add(wallClone);
 
                     //se i for 2 a parede da esquerda é feita
                 } else if (i === 2) {
@@ -103,6 +108,7 @@ function createRoom({ model: model, name: name = '', qRoom: qRoom = false, sideW
 
                     wallClone.rotateZ(degToRad(90));
                     leftWallGroup.add(wallClone);
+                    leftWallGroup.add(wallClone);
                 }
 
 
@@ -113,43 +119,19 @@ function createRoom({ model: model, name: name = '', qRoom: qRoom = false, sideW
 
     }
 
-    //add AABB for collison
-    // const rightBoxHelper = new BoxHelper(rightWallGroup, 0xff0000);
-    // rightBoxHelper.name = "rightBoxHelper"
-    // const rightBBox = new Box3();
-    // rightBBox.setFromObject(rightBoxHelper);
-    // rightBBox.name = "rightBBox";
-    // rightWallGroup.add(rightBoxHelper);
-    //rightWallGroup.add(rightBBox);
 
-
-    // const leftBoxHelper = new BoxHelper(leftWallGroup, 0x00ff00);
-    // leftBoxHelper.name = "leftBoxHelper"
-    // const leftBBox = new Box3();
-    // leftBBox.setFromObject(leftBoxHelper);
-    // leftBBox.name = "leftBBox";
-    // leftWallGroup.add(leftBoxHelper);
-    // //leftWallGroup.add(leftBBox);
-
-    // const backBoxHelper = new BoxHelper(backWallGroup, 0x0000ff);
-    // backBoxHelper.name = "backBoxHelper";
-    // const backBBox = new Box3();
-    // backBBox.name = "backBBox";
-    // backBBox.setFromObject(backBoxHelper);
-    // backWallGroup.add(backBoxHelper);
 
     roomWalls.add(backWallGroup, rightWallGroup, leftWallGroup)
     room.add(roomWalls);
     //room.rotateY(degToRad(90));
-    if(!qRoom){
-        console.log(room);
+    if (!qRoom) {
+        //console.log(room);
         room.getObjectByName("door_arc").position.x = 4;
-        room.getObjectByName("door001") === undefined ? "n é obj":  room.getObjectByName("door001").position.x = 3;
+        room.getObjectByName("door001") === undefined ? "n é obj" : room.getObjectByName("door001").position.x = 3;
         //room.add(getBBoxHelper(room));
-        
+
     }
     return room;
-
 
 }
 
@@ -265,36 +247,50 @@ function getWall(model, qRoom = false) {
     const bWalls = [];
     const sWalls = [];
 
+    //get brick wall
+    bWalls.push(model.scene.getObjectByName("brick_wall").clone());
+    bWalls.push(model.scene.getObjectByName("brick_wall001").clone());
+    bWalls.push(model.scene.getObjectByName("brick_wall002").clone());
 
+
+    //get smooth wall
+    sWalls.push(model.scene.getObjectByName("smooth_wall").clone());
+    sWalls.push(model.scene.getObjectByName("smooth_wall001").clone());
+    sWalls.push(model.scene.getObjectByName("smooth_wall002").clone());
+    sWalls.push(model.scene.getObjectByName("smooth_wall003").clone());
+    sWalls.push(model.scene.getObjectByName("smooth_wall004").clone());
 
     //get brick wall
-    bWalls.push(model.scene.getObjectById(95).clone());
-    for (let i = 99; i < 104; i++) {
-        bWalls.push(model.scene.getObjectById(i).clone());
+    // bWalls.push(model.scene.getObjectById(95).clone());
+    // for (let i = 99; i < 104; i++) {
+    //     bWalls.push(model.scene.getObjectById(i).clone());
 
-    }
-    // get window wall
-    bWalls.push(model.scene.getObjectById(115).clone());
-    bWalls.push(model.scene.getObjectById(116).clone());
+    // }
+    // // get window wall
+    // bWalls.push(model.scene.getObjectById(115).clone());
+    // bWalls.push(model.scene.getObjectById(116).clone());
 
-    //get Smooth wall
-    sWalls.push(model.scene.getObjectById(96).clone());
-    for (let i = 104; i < 108; i++) {
-        sWalls.push(model.scene.getObjectById(i).clone());
+    // //get Smooth wall
+    // sWalls.push(model.scene.getObjectById(96).clone());
+    // for (let i = 104; i < 108; i++) {
+    //     sWalls.push(model.scene.getObjectById(i).clone());
 
-    }
+    // }
 
     const walls = [];
     walls.push(bWalls);
     walls.push(sWalls);
 
     if (qRoom === false) {
+        //se não for uma question room então adiciona mais umas portas de tijolos
+        bWalls.push(model.scene.getObjectByName("brick_wall003").clone());
+        bWalls.push(model.scene.getObjectByName("brick_wall004").clone());
+        bWalls.push(model.scene.getObjectByName("brick_wall005").clone());
+        bWalls.push(model.scene.getObjectByName("window").clone());
+        bWalls.push(model.scene.getObjectByName("window001").clone());
+
         return walls[getRandomIndex(walls)];
     } else {
-        //remove os 4 ultimos elementos, que são paredes com buracos
-        for (let i = 0; i < 5; i++) {
-            bWalls.pop();
-        }
 
         return bWalls;
     }
@@ -379,7 +375,6 @@ function getBBoxHelper(room) {
 
     return roomBoxGroup;
 }
-
 
 
 

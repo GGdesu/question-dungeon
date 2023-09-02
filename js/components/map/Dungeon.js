@@ -57,70 +57,70 @@ function makeDungeon(scene, models, physicWorld) {
     const skulls = multiplyObj(models.scene.getObjectByName("skull").clone());
 
 
-    //scene.add(skulls[0], skulls[1], skulls[2], skulls[3], skulls[4], skulls[5], skulls[6], skulls[7],skulls[8],skulls[9]);
+    scene.add(skulls[0], skulls[1], skulls[2], skulls[3], skulls[4], skulls[5], skulls[6], skulls[7],skulls[8],skulls[9]);
 
     const woodenBox = multiplyObj(models.scene.getObjectByName("wooden_box").clone(), 10);
-    woodenBox[0].position.set(-62, 0.5, 44);
+    woodenBox[0].position.set(-62, 0.2, 44);
     woodenBox[0].add(skulls[0]);
     skulls[0].position.set(0, 0, 0.4);
     skulls[0].rotateX(degToRad(90));
     skulls[0].scale.set(1, 1, 1);
 
-    woodenBox[1].position.set(-45, 0.5, -129);
+    woodenBox[1].position.set(-45, 0.2, -129);
     woodenBox[1].add(skulls[1]);
     skulls[1].position.set(0, 0, 0.4);
     skulls[1].rotateX(degToRad(90));
     skulls[1].scale.set(1, 1, 1);
 
-    woodenBox[2].position.set(104, 0.5, -44);
+    woodenBox[2].position.set(104, 0.2, -44);
     woodenBox[2].add(skulls[2]);
     skulls[2].position.set(0, 0, 0.4);
     skulls[2].rotateX(degToRad(90));
     skulls[2].scale.set(1, 1, 1);
 
-    woodenBox[3].position.set(95, 0.5, 135);
+    woodenBox[3].position.set(95, 0.2, 135);
     woodenBox[3].add(skulls[3]);
     skulls[3].position.set(0, 0, 0.4);
     skulls[3].rotateX(degToRad(90));
     skulls[3].scale.set(1, 1, 1);
 
-    woodenBox[4].position.set(-33, 0.5, 95);
+    woodenBox[4].position.set(-33,0.2, 95);
     woodenBox[4].add(skulls[4]);
     skulls[4].position.set(0, 0, 0.4);
     skulls[4].rotateX(degToRad(90));
     skulls[4].scale.set(1, 1, 1);
 
-    woodenBox[5].position.set(-92, 0.5, -55);
+    woodenBox[5].position.set(-92, 0.2, -55);
     woodenBox[5].add(skulls[5]);
     skulls[5].position.set(0, 0, 0.4);
     skulls[5].rotateX(degToRad(90));
     skulls[5].scale.set(1, 1, 1);
 
-    woodenBox[6].position.set(42, 0.5, -46);
+    woodenBox[6].position.set(42, 0.2, -46);
     woodenBox[6].add(skulls[6]);
     skulls[6].position.set(0, 0, 0.4);
     skulls[6].rotateX(degToRad(90));
     skulls[6].scale.set(1, 1, 1);
 
-    woodenBox[7].position.set(115, 0.5, 62);
+    woodenBox[7].position.set(115, 0.2, 62);
     woodenBox[7].add(skulls[7]);
     skulls[7].position.set(0, 0, 0.4);
     skulls[7].rotateX(degToRad(90));
     skulls[7].scale.set(1, 1, 1);
 
-    woodenBox[8].position.set(-81, 0.5, 83);
+    woodenBox[8].position.set(-81, 0.2, 83);
     woodenBox[8].add(skulls[8]);
     skulls[8].position.set(0, 0, 0.4);
     skulls[8].rotateX(degToRad(90));
     skulls[8].scale.set(1, 1, 1);
 
-    woodenBox[9].position.set(-40, 0.5, -34);
+    woodenBox[9].position.set(-40, 0.2, -34);
     woodenBox[9].add(skulls[9]);
     skulls[9].position.set(0, 0, 0.4);
     skulls[9].rotateX(degToRad(90));
     skulls[9].scale.set(1, 1, 1);
 
-    //scene.add(woodenBox[0], woodenBox[1], woodenBox[2], woodenBox[3], woodenBox[4], woodenBox[5], woodenBox[6], woodenBox[7], woodenBox[8], woodenBox[9]);
+    scene.add(woodenBox[0], woodenBox[1], woodenBox[2], woodenBox[3], woodenBox[4], woodenBox[5], woodenBox[6], woodenBox[7], woodenBox[8], woodenBox[9]);
 
     const chestArray = makeChest(models, 4);
     chestArray[0].position.set(-75, 0.5, 113);
@@ -130,7 +130,7 @@ function makeDungeon(scene, models, physicWorld) {
     chestArray[2].position.set(87, 0.5, -142);
     chestArray[3].position.set(43, 0.5, 44);
 
-    //scene.add(chestArray[0], chestArray[1], chestArray[2], chestArray[3]);
+    scene.add(chestArray[0], chestArray[1], chestArray[2], chestArray[3]);
 
 
 
@@ -292,14 +292,14 @@ function makeDungeon(scene, models, physicWorld) {
     //const roomTeste = new Room({ model: models, qRoom: false, sideWallNumber: 5, backWallNumber: 5, doorColor: COLORS[getRandomIndex(COLORS)], name: "teste question room" });
     //roomTeste.room.position.set(5, 1, 0);
 
-    // scene.add(room01.room, room02.room, room03.room, room04.room, room05.room);
-    // scene.add(room06.room, room07.room, room08.room, room09.room, room10.room);
-    // scene.add(room11.room, room12.room, room13.room, room14.room, room15.room);
-    // scene.add(room16.room, room17.room, room18.room, room19.room, room20.room);
+    scene.add(room01.room, room02.room, room03.room, room04.room, room05.room);
+    scene.add(room06.room, room07.room, room08.room, room09.room, room10.room);
+    scene.add(room11.room, room12.room, room13.room, room14.room, room15.room);
+    scene.add(room16.room, room17.room, room18.room, room19.room, room20.room);
     scene.add(qRoom0.room);
     scene.add(qRoom1.room);
-    // scene.add(qRoom2.room);
-    // scene.add(qRoom3.room);
+    scene.add(qRoom2.room);
+    scene.add(qRoom3.room);
     //testroom.position.set(0,0,0)
     //scene.add(testroom);
 

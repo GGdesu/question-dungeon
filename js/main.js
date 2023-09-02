@@ -15,7 +15,7 @@ async function main() {
     // new code
 
     const container = document.querySelector('#scene-container');
-    const allowVR = false;
+    const allowVR = true;
 
     const world = new World({ canvas: container, allowVR: allowVR });
 
